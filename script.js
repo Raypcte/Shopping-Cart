@@ -14,6 +14,22 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
+const cartItemClickListener = (event) => {};
+
+const createCartItemElement = ({ sku, name, salePrice }) => {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+};
+
+async function fetchItemsCar(id) {
+ const item = await fetchItem(id);
+ const ol = document.querySelector('.cart__items');
+ ol.appendChild(createCartItemElement({ sku: id, name: item.title, salePrice: item.price }));
+}
+
 const createProductItemElement = ({ sku, name, image }) => {
   const section = document.createElement('section'); // Criou uma section
   section.className = 'item'; // Criou uma classe na section
@@ -21,9 +37,13 @@ const createProductItemElement = ({ sku, name, image }) => {
   section.appendChild(createCustomElement('span', 'item__sku', sku)); // atribuir um filho span com sku
   section.appendChild(createCustomElement('span', 'item__title', name)); // com nome
   section.appendChild(createProductImageElement(image)); // com imagem
-  section.appendChild(
-    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
-  ); // com botao
+  const botaoAdd = createCustomElement(
+    'button',
+    'item__add',
+    'Adicionar ao carrinho!',
+  );
+  botaoAdd.addEventListener('click', () => fetchItemsCar(sku));
+  section.appendChild(botaoAdd); // com botao
 
   return section;
 };
@@ -46,16 +66,6 @@ async function renderizaProdutos() {
 
 const getSkuFromProductItem = (item) =>
   item.querySelector('span.item__sku').innerText;
-
-const cartItemClickListener = (event) => {};
-
-const createCartItemElement = ({ sku, name, salePrice }) => {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-};
 
 window.onload = () => {
   renderizaProdutos();
