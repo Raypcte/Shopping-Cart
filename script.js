@@ -15,14 +15,14 @@ const createCustomElement = (element, className, innerText) => {
 };
 
 const createProductItemElement = ({ sku, name, image }) => {
-  const section = document.createElement('section'); //Criou uma section
-  section.className = 'item'; //Criou uma classe na section
+  const section = document.createElement('section'); // Criou uma section
+  section.className = 'item'; // Criou uma classe na section
 
   section.appendChild(createCustomElement('span', 'item__sku', sku)); // atribuir um filho span com sku
   section.appendChild(createCustomElement('span', 'item__title', name)); // com nome
   section.appendChild(createProductImageElement(image)); // com imagem
   section.appendChild(
-    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!')
+    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
   ); // com botao
 
   return section;
@@ -36,10 +36,10 @@ async function renderizaProdutos() {
     const produtoComputador = createProductItemElement({
       sku: produto.id,
       name: produto.title,
-      image: produto.thumbnail
+      image: produto.thumbnail,
     });
 
-    sessaoProdutos.appendChild(produtoComputador); //Aqui fiz o appdendiChild para levar os itens do JS para o html tipo push
+    sessaoProdutos.appendChild(produtoComputador); // Aqui fiz o appdendiChild para levar os itens do JS para o html tipo push
   });
   // console.log(produtos);
 }
