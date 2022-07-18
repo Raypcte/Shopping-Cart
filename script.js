@@ -1,5 +1,3 @@
-// const { fetchProducts } = require('./helpers/fetchProducts');
-
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -28,9 +26,17 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 };
 
 async function fetchItemsCar(id) {
- const item = await fetchItem(id);
- const ol = document.querySelector('.cart__items');
- ol.appendChild(createCartItemElement({ sku: id, name: item.title, salePrice: item.price }));
+  const item = await fetchItem(id);
+  const ol = document.querySelector('.cart__items');
+  const produto = createCartItemElement({
+    sku: id,
+    name: item.title,
+    salePrice: item.price,
+  });
+  
+  ol.appendChild(produto);
+  saveCartItems(ol.innerHTML);
+  // console.log('produto', ol.innerHTML);
 }
 
 const createProductItemElement = ({ sku, name, image }) => {
@@ -70,6 +76,17 @@ async function renderizaProdutos() {
 const getSkuFromProductItem = (item) =>
   item.querySelector('span.item__sku').innerText;
 
+  function atualizaCarrinho() {
+   const produtosCarrinho = getSavedCartItems();
+    const ol = document.querySelector('.cart__items');
+    ol.innerHTML = produtosCarrinho;
+
+    const itensLista = document.querySelectorAll('.cart__item');
+    console.log(itensLista);
+    itensLista.forEach((li) => li.addEventListener('click', cartItemClickListener));
+  }
+
 window.onload = () => {
+  atualizaCarrinho();
   renderizaProdutos();
 };
